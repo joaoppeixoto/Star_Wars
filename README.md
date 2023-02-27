@@ -26,7 +26,7 @@ Ao iniciar este projeto, você concorda com as diretrizes do Código de Conduta 
   Você vai desenvolver uma lista com filtros de planetas do universo de Star Wars usando **Context API e Hooks** para controlar os estados globais.
 
   **Segue link do deploy de um modelo do projeto:**
-  https://trybe-starwars.surge.sh/
+  http://trybe-starwars-exemplo.surge.sh/
 
   :warning:**IMPORTANTE**: O modelo serve apenas para fins de ilustração. Para desenvolver o projeto, é mandatório que você siga os requisitos apontados no Readme.
 
@@ -204,7 +204,7 @@ Ao iniciar este projeto, você concorda com as diretrizes do Código de Conduta 
 
   Este repositório já contém um _template_ de uma aplicação React criado e configurado. Após clonar o projeto e instalar as dependências, você poderá criar a sua branch e iniciar o trabalho.
 
-  O modelo do projeto pode ser acessado [neste link](https://trybe-starwars.surge.sh/).
+  O modelo do projeto pode ser acessado [neste link](http://trybe-starwars-exemplo.surge.sh/).
 
   :warning: **IMPORTANTE**: O modelo serve apenas para fins de ilustração. Para desenvolver o projeto, é mandatório que você siga os requisitos apontados no Readme.
 </details>

@@ -1,47 +1,26 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import PlanetContext from './PlanetContext';
+import getPlanets from '../services/FetchApi';
 
 function PlanetProvider({ children }) {
   const [planetName, setPlanetName] = useState([]);
-  const [columnFilter, setColumnFilter] = useState('population');
-  const [numericalFilter, setNumericalFilter] = useState(0);
-  const [compairFilter, setCompairFilter] = useState('maior que');
-  const [orderItem, setOrderItem] = useState([]);
-  const [filterByName, setFilterByName] = useState([]);
-  const [filters, setFilters] = useState({});
+  useEffect(() => {
+    const fetchApi = async () => {
+      const response = await getPlanets();
+      setPlanetName(response);
+    };
+    fetchApi();
+  }, []);
 
   const values = useMemo(() => ({
     planetName,
     setPlanetName,
-    columnFilter,
-    setColumnFilter,
-    numericalFilter,
-    setNumericalFilter,
-    compairFilter,
-    setCompairFilter,
-    orderItem,
-    setOrderItem,
-    filterByName,
-    setFilterByName,
-    filters,
-    setFilters,
+
   }), [
     planetName,
-    setPlanetName,
-    columnFilter,
-    setColumnFilter,
-    numericalFilter,
-    setNumericalFilter,
-    compairFilter,
-    setCompairFilter,
-    orderItem,
-    setOrderItem,
-    filterByName,
-    setFilterByName,
-    filters,
-    setFilters]);
 
+  ]);
   return (
     <main>
       <PlanetContext.Provider value={ values }>{ children }</PlanetContext.Provider>

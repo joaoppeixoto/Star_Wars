@@ -5,6 +5,8 @@ import getPlanets from '../services/FetchApi';
 
 function PlanetProvider({ children }) {
   const [planetName, setPlanetName] = useState([]);
+  const [planetFilter, setPlanetFilter] = useState('');
+
   useEffect(() => {
     const fetchApi = async () => {
       const response = await getPlanets();
@@ -16,9 +18,12 @@ function PlanetProvider({ children }) {
   const values = useMemo(() => ({
     planetName,
     setPlanetName,
+    planetFilter,
+    setPlanetFilter,
 
   }), [
     planetName,
+    planetFilter,
 
   ]);
   return (

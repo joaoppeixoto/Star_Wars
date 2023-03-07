@@ -6,6 +6,12 @@ import getPlanets from '../services/FetchApi';
 function PlanetProvider({ children }) {
   const [planetName, setPlanetName] = useState([]);
   const [planetFilter, setPlanetFilter] = useState('');
+  const [selected, setSelected] = useState({
+    numericalValue: 0,
+    collumn: 'population',
+    condition: 'maior que',
+  });
+  const [selectedFilters, setSelectedFilters] = useState([]);
 
   useEffect(() => {
     const fetchApi = async () => {
@@ -20,10 +26,16 @@ function PlanetProvider({ children }) {
     setPlanetName,
     planetFilter,
     setPlanetFilter,
+    selected,
+    setSelected,
+    selectedFilters,
+    setSelectedFilters,
 
   }), [
     planetName,
     planetFilter,
+    selected,
+    selectedFilters,
 
   ]);
   return (

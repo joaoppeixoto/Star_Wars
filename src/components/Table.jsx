@@ -2,20 +2,141 @@ import React, { useContext } from 'react';
 import PlanetContext from '../context/PlanetContext';
 
 function Table() {
-  const { planetName, planetFilter, setPlanetFilter } = useContext(PlanetContext);
-  const filteredPlanets = planetName
-    .filter((planet) => planet.name.includes(planetFilter));
-  console.log(filteredPlanets);
+  const { planetName,
+    planetFilter,
+    setPlanetFilter,
+    selected,
+    setSelected,
+    selectedFilters,
+    setSelectedFilters,
+  } = useContext(PlanetContext);
+
+  const tratmentFilters = () => {
+    const filteredPlanetsByName = planetName
+      .filter(({ name }) => name.toUpperCase().includes(planetFilter.toUpperCase()));
+
+    const filteredPlanetsByNameAndCondition = filteredPlanetsByName.filter((planet) => {
+      const filterPlanet = selectedFilters
+        .map(({ collumn, condition, numericalValue }) => {
+          switch (condition) {
+          case 'maior que':
+            return Number(planet[collumn]) > (Number(numericalValue));
+          case 'menor que':
+            return Number(planet[collumn]) < (Number(numericalValue));
+          case 'igual a':
+            return Number(planet[collumn]) === (Number(numericalValue));
+          default: return true;
+          }
+        });
+      return filterPlanet.every((element) => element);
+    });
+    return filteredPlanetsByNameAndCondition;
+  };
+
+  // const filteredByNameAndCodition = planetName.filter((planets) => {
+  //     .map(() => {
+  //       switch (condition) {
+  //       case '>':
+  //         return Number(planets[collumn]) > Number(numericalValue);
+  //       case '<':
+  //         return Number(planets[collumn]) < Number(numericalValue);
+  //       case '=':
+  //         return Number(planets[collumn]) === Number(numericalValue);
+  //       default: return true;
+  //       }
+  //     });
+  // });
+  // return filteredByNameAndCodition;
+
   return (
     <div>
-      <input
-        placeholder="Filtrar por nome"
-        data-testid="name-filter"
-        name="filter"
-        type="text"
-        value={ planetFilter }
-        onChange={ (event) => setPlanetFilter(event.target.value) }
-      />
+      <header>
+        <select
+          data-testid="column-filter"
+          value={ selected.collumn }
+          onChange={
+            (event) => setSelected({ ...selected, collumn: event.target.value })
+          }
+        >
+          { ['population',
+            'orbital_period',
+            'diameter',
+            'rotation_period',
+            'surface_water']
+            .map((collumn) => (
+              <option key={ collumn } value={ collumn }>
+                { collumn }
+              </option>
+            ))}
+        </select>
+
+        <label>
+          <select
+            data-testid="comparison-filter"
+            value={ selected.condition }
+            onChange={
+              (event) => setSelected({ ...selected, condition: event.target.value })
+            }
+          >
+            { ['maior que',
+              'menor que',
+              'igual a',
+            ]
+              .map((condition) => (
+                <option key={ condition } value={ condition }>
+                  { condition }
+                </option>
+              ))}
+
+          </select>
+        </label>
+
+        <input
+          data-testid="value-filter"
+          type="number"
+          name="numericalValue"
+          value={ selected.numericalValue }
+          onChange={
+            (event) => setSelected({ ...selected, numericalValue: event.target.value })
+          }
+        />
+        <button
+          data-testid="button-filter"
+          type="button"
+          onClick={ () => setSelectedFilters([...selectedFilters, selected]) }
+        >
+          Filtrar
+
+        </button>
+        <input
+          placeholder="Filtrar por nome"
+          data-testid="name-filter"
+          name="filter"
+          type="text"
+          value={ planetFilter }
+          onChange={ (event) => setPlanetFilter(event.target.value) }
+        />
+        <label>
+          <select>
+            <option value="">Population</option>
+            <option value="">Orbital_Period</option>
+            <option value="">Diameter</option>
+            <option value="">Rotation_Period</option>
+            <option value="">Surface_Water</option>
+          </select>
+        </label>
+      </header>
+      {
+        selectedFilters.map((filter) => (
+          <div key={ filter }>
+            <span>
+              {filter.collumn}
+              {filter.condition}
+              {filter.numericalValue}
+            </span>
+          </div>
+        ))
+      }
       <table>
         <thead>
           <tr>
@@ -35,7 +156,7 @@ function Table() {
           </tr>
         </thead>
         <tbody>
-          {filteredPlanets.map((planet, index) => (
+          {tratmentFilters().map((planet, index) => (
             <tr key={ index }>
               <th>{planet.name}</th>
               <th>{planet.rotation_period}</th>

@@ -40,6 +40,11 @@ function Table() {
     const decreaseOptions = attributesFilter
       .filter((attribute) => attribute !== selected.collumn);
     setAttributesFilter(decreaseOptions);
+    setSelected({
+      numericalValue: 0,
+      collumn: 'population',
+      condition: 'maior que',
+    });
   };
 
   return (
@@ -54,7 +59,10 @@ function Table() {
         >
           {
             attributesFilter.map((collumn) => (
-              <option key={ collumn } value={ collumn }>
+              <option
+                key={ collumn }
+                value={ collumn }
+              >
                 { collumn }
               </option>
             ))

@@ -12,6 +12,13 @@ function PlanetProvider({ children }) {
     condition: 'maior que',
   });
   const [selectedFilters, setSelectedFilters] = useState([]);
+  const [attributesFilter, setAttributesFilter] = useState([
+    'population',
+    'orbital_period',
+    'diameter',
+    'rotation_period',
+    'surface_water',
+  ]);
 
   useEffect(() => {
     const fetchApi = async () => {
@@ -30,12 +37,15 @@ function PlanetProvider({ children }) {
     setSelected,
     selectedFilters,
     setSelectedFilters,
+    attributesFilter,
+    setAttributesFilter,
 
   }), [
     planetName,
     planetFilter,
     selected,
     selectedFilters,
+    attributesFilter,
 
   ]);
   return (

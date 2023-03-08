@@ -9,6 +9,8 @@ function Table() {
     setSelected,
     selectedFilters,
     setSelectedFilters,
+    attributesFilter,
+    setAttributesFilter,
   } = useContext(PlanetContext);
 
   const tratmentFilters = () => {
@@ -33,20 +35,12 @@ function Table() {
     return filteredPlanetsByNameAndCondition;
   };
 
-  // const filteredByNameAndCodition = planetName.filter((planets) => {
-  //     .map(() => {
-  //       switch (condition) {
-  //       case '>':
-  //         return Number(planets[collumn]) > Number(numericalValue);
-  //       case '<':
-  //         return Number(planets[collumn]) < Number(numericalValue);
-  //       case '=':
-  //         return Number(planets[collumn]) === Number(numericalValue);
-  //       default: return true;
-  //       }
-  //     });
-  // });
-  // return filteredByNameAndCodition;
+  const deleteOptions = () => {
+    setSelectedFilters([...selectedFilters, selected]);
+    const decreaseOptions = attributesFilter
+      .filter((attribute) => attribute !== selected.collumn);
+    setAttributesFilter(decreaseOptions);
+  };
 
   return (
     <div>
@@ -58,16 +52,13 @@ function Table() {
             (event) => setSelected({ ...selected, collumn: event.target.value })
           }
         >
-          { ['population',
-            'orbital_period',
-            'diameter',
-            'rotation_period',
-            'surface_water']
-            .map((collumn) => (
+          {
+            attributesFilter.map((collumn) => (
               <option key={ collumn } value={ collumn }>
                 { collumn }
               </option>
-            ))}
+            ))
+          }
         </select>
 
         <label>
@@ -103,7 +94,7 @@ function Table() {
         <button
           data-testid="button-filter"
           type="button"
-          onClick={ () => setSelectedFilters([...selectedFilters, selected]) }
+          onClick={ deleteOptions }
         >
           Filtrar
 

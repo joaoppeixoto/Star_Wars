@@ -2,7 +2,8 @@ import React, { useContext } from 'react';
 import PlanetContext from '../context/PlanetContext';
 
 function Table() {
-  const { planetName,
+  const {
+    planetName,
     planetFilter,
     setPlanetFilter,
     selected,
@@ -11,6 +12,8 @@ function Table() {
     setSelectedFilters,
     attributesFilter,
     setAttributesFilter,
+    order,
+    setOrder,
   } = useContext(PlanetContext);
 
   const tratmentFilters = () => {
@@ -42,9 +45,33 @@ function Table() {
     setAttributesFilter(decreaseOptions);
     setSelected({
       numericalValue: 0,
-      collumn: 'population',
+      collumn: decreaseOptions[0],
       condition: 'maior que',
     });
+  };
+
+  const deleteFilters = (c) => {
+    const remove = selectedFilters.filter((filters) => filters.collumn !== c);
+    setSelectedFilters(remove);
+    // setSelected({
+    //   numericalValue: 0,
+    //   collumn: remove[0],
+    //   condition: 'maior que',
+    // });
+  };
+
+  const collumnSort = (p1, p2) => {
+    const { collumn, sort } = order;
+    const decrement = -1;
+    const value1 = Number(p1[collumn]);
+    const value2 = Number(p2[collumn]);
+    if (value1 === value2) return 0;
+    if (Number.isNaN(value1)) return 1;
+    if (Number.isNaN(value2)) return decrement;
+    if (sort === 'ASC') {
+      return value1 > value2 ? 1 : decrement;
+    }
+    return value1 < value2 ? 1 : decrement;
   };
 
   return (
@@ -58,12 +85,12 @@ function Table() {
           }
         >
           {
-            attributesFilter.map((collumn) => (
+            attributesFilter.map((aFilter) => (
               <option
-                key={ collumn }
-                value={ collumn }
+                key={ aFilter }
+                value={ aFilter }
               >
-                { collumn }
+                { aFilter }
               </option>
             ))
           }
@@ -116,26 +143,72 @@ function Table() {
           onChange={ (event) => setPlanetFilter(event.target.value) }
         />
         <label>
-          <select>
+          <select data-testid="column-sort">
             <option value="">Population</option>
             <option value="">Orbital_Period</option>
             <option value="">Diameter</option>
             <option value="">Rotation_Period</option>
             <option value="">Surface_Water</option>
           </select>
+
+          <input
+            type="radio"
+            data-testid="column-sort-input-asc"
+            value="ASC"
+          />
+          Ascendente
+
+          <input
+            type="radio"
+            data-testid="column-sort-input-desc"
+            value="DESC"
+          />
+          Descendente
         </label>
+        <button
+          data-testid="column-sort-button"
+          onClick={ collumnSort }
+        >
+          Ordenar
+
+        </button>
+        <button
+          type="button"
+          data-testid="button-remove-filters"
+          onClick={ () => setSelectedFilters([]) }
+
+        >
+          Remover Filtros
+
+        </button>
+        {
+          selectedFilters.map((filter) => (
+            <div data-testid="filter" key={ filter.collumn }>
+
+              <button
+                onClick={ () => deleteFilters(filter.collumn) }
+                type="button"
+              >
+                {' '}
+                X
+
+              </button>
+
+              <p>{filter.collumn}</p>
+              <p>
+                {' '}
+                {filter.condition}
+              </p>
+              <p>
+                {' '}
+                {filter.numericalValue}
+              </p>
+            </div>
+
+          ))
+        }
+
       </header>
-      {
-        selectedFilters.map((filter) => (
-          <div key={ filter }>
-            <span>
-              {filter.collumn}
-              {filter.condition}
-              {filter.numericalValue}
-            </span>
-          </div>
-        ))
-      }
       <table>
         <thead>
           <tr>

@@ -19,6 +19,7 @@ function PlanetProvider({ children }) {
     'rotation_period',
     'surface_water',
   ]);
+  const [order, setOrder] = useState({ order: { column: 'population', sort: 'ASC' } });
 
   useEffect(() => {
     const fetchApi = async () => {
@@ -39,6 +40,8 @@ function PlanetProvider({ children }) {
     setSelectedFilters,
     attributesFilter,
     setAttributesFilter,
+    order,
+    setOrder,
 
   }), [
     planetName,
@@ -46,6 +49,7 @@ function PlanetProvider({ children }) {
     selected,
     selectedFilters,
     attributesFilter,
+    order,
 
   ]);
   return (

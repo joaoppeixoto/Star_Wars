@@ -13,7 +13,7 @@ function Table() {
     attributesFilter,
     setAttributesFilter,
     order,
-    setOrder,
+    // setOrder,
   } = useContext(PlanetContext);
 
   const tratmentFilters = () => {
@@ -189,7 +189,6 @@ function Table() {
                 onClick={ () => deleteFilters(filter.collumn) }
                 type="button"
               >
-                {' '}
                 X
 
               </button>
@@ -204,10 +203,8 @@ function Table() {
                 {filter.numericalValue}
               </p>
             </div>
-
           ))
         }
-
       </header>
       <table>
         <thead>
@@ -250,5 +247,4 @@ function Table() {
     </div>
   );
 }
-
 export default Table;

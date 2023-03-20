@@ -19,7 +19,7 @@ function PlanetProvider({ children }) {
     'rotation_period',
     'surface_water',
   ]);
-  const [order, setOrder] = useState({ order: { column: 'population', sort: 'ASC' } });
+  const [order, setOrder] = useState({ column: 'Population', sort: 'ASC' });
 
   useEffect(() => {
     const fetchApi = async () => {

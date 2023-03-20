@@ -13,13 +13,12 @@ function Table() {
     attributesFilter,
     setAttributesFilter,
     order,
-    // setOrder,
+    setOrder,
   } = useContext(PlanetContext);
 
   const tratmentFilters = () => {
     const filteredPlanetsByName = planetName
       .filter(({ name }) => name.toUpperCase().includes(planetFilter.toUpperCase()));
-
     const filteredPlanetsByNameAndCondition = filteredPlanetsByName.filter((planet) => {
       const filterPlanet = selectedFilters
         .map(({ collumn, condition, numericalValue }) => {
@@ -37,7 +36,6 @@ function Table() {
     });
     return filteredPlanetsByNameAndCondition;
   };
-
   const deleteOptions = () => {
     setSelectedFilters([...selectedFilters, selected]);
     const decreaseOptions = attributesFilter
@@ -53,26 +51,24 @@ function Table() {
   const deleteFilters = (c) => {
     const remove = selectedFilters.filter((filters) => filters.collumn !== c);
     setSelectedFilters(remove);
-    // setSelected({
-    //   numericalValue: 0,
-    //   collumn: remove[0],
-    //   condition: 'maior que',
-    // });
   };
+  // const collumnSort = () => {
+  //   const sortFilter = planetName.sort((a, b) => {
+  //     const magicNumber = -1;
+  //     if (b[order.collumn] === 'unknown') return magicNumber;
+  //     if (order.sort === 'ASC') {
+  //       return +a[order.collumn] - +b[order.collumn];
+  //     }
+  //     return +b[order.collumn] - +a[order.collumn];
+  //   });
+  //   const results = [...sortFilter];
+  //   setOrder(results);
+  // };
 
-  const collumnSort = (p1, p2) => {
-    const { collumn, sort } = order;
-    const decrement = -1;
-    const value1 = Number(p1[collumn]);
-    const value2 = Number(p2[collumn]);
-    if (value1 === value2) return 0;
-    if (Number.isNaN(value1)) return 1;
-    if (Number.isNaN(value2)) return decrement;
-    if (sort === 'ASC') {
-      return value1 > value2 ? 1 : decrement;
-    }
-    return value1 < value2 ? 1 : decrement;
-  };
+  // const ordered = order.collumn.sort((a, b) => {
+  //   a.order.collumn.localCompare(b.order.collumn);
+  //  console.log(ordered);
+  // });
 
   return (
     <div>
@@ -143,7 +139,11 @@ function Table() {
           onChange={ (event) => setPlanetFilter(event.target.value) }
         />
         <label>
-          <select data-testid="column-sort">
+          <select
+            data-testid="column-sort"
+            value={ order.collumn }
+            onChange={ (e) => setOrder(e.target.value) }
+          >
             <option value="">Population</option>
             <option value="">Orbital_Period</option>
             <option value="">Diameter</option>
@@ -155,6 +155,8 @@ function Table() {
             type="radio"
             data-testid="column-sort-input-asc"
             value="ASC"
+            id="ASC"
+            onChange={ (e) => setOrder(e.target.value) }
           />
           Ascendente
 
@@ -162,12 +164,14 @@ function Table() {
             type="radio"
             data-testid="column-sort-input-desc"
             value="DESC"
+            id="DESC"
+            onChange={ (e) => setOrder(e.target.value) }
           />
           Descendente
         </label>
         <button
           data-testid="column-sort-button"
-          onClick={ collumnSort }
+          // onClick={ collumnSort }
         >
           Ordenar
 
@@ -176,10 +180,8 @@ function Table() {
           type="button"
           data-testid="button-remove-filters"
           onClick={ () => setSelectedFilters([]) }
-
         >
           Remover Filtros
-
         </button>
         {
           selectedFilters.map((filter) => (
@@ -190,9 +192,7 @@ function Table() {
                 type="button"
               >
                 X
-
               </button>
-
               <p>{filter.collumn}</p>
               <p>
                 {' '}

@@ -13,8 +13,16 @@ function Table() {
     attributesFilter,
     setAttributesFilter,
     order,
-    setOrder,
+    // setOrder,
   } = useContext(PlanetContext);
+
+  // const columnSort = (sortPlanets) => sortPlanets.sort((a, b) => {
+  //   const magicNumber = -1;
+  //   const { column, sort } = order;
+  //   if (b[column] === 'unknown') return magicNumber;
+  //   if (sort === 'ASC') return a[column] - b[column];
+  //   return b[column] - a[column];
+  // });
 
   const tratmentFilters = () => {
     const filteredPlanetsByName = planetName
@@ -27,15 +35,15 @@ function Table() {
             return Number(planet[collumn]) > (Number(numericalValue));
           case 'menor que':
             return Number(planet[collumn]) < (Number(numericalValue));
-          case 'igual a':
-            return Number(planet[collumn]) === (Number(numericalValue));
-          default: return true;
+
+          default: return Number(planet[collumn]) === (Number(numericalValue));
           }
         });
       return filterPlanet.every((element) => element);
     });
     return filteredPlanetsByNameAndCondition;
   };
+
   const deleteOptions = () => {
     setSelectedFilters([...selectedFilters, selected]);
     const decreaseOptions = attributesFilter
@@ -52,23 +60,6 @@ function Table() {
     const remove = selectedFilters.filter((filters) => filters.collumn !== c);
     setSelectedFilters(remove);
   };
-  // const collumnSort = () => {
-  //   const sortFilter = planetName.sort((a, b) => {
-  //     const magicNumber = -1;
-  //     if (b[order.collumn] === 'unknown') return magicNumber;
-  //     if (order.sort === 'ASC') {
-  //       return +a[order.collumn] - +b[order.collumn];
-  //     }
-  //     return +b[order.collumn] - +a[order.collumn];
-  //   });
-  //   const results = [...sortFilter];
-  //   setOrder(results);
-  // };
-
-  // const ordered = order.collumn.sort((a, b) => {
-  //   a.order.collumn.localCompare(b.order.collumn);
-  //  console.log(ordered);
-  // });
 
   return (
     <div>
@@ -142,13 +133,14 @@ function Table() {
           <select
             data-testid="column-sort"
             value={ order.collumn }
-            onChange={ (e) => setOrder(e.target.value) }
+            // onChange={ ({ target }) => setOrder({
+            //   ...planetName, order: { column: target.value, sort: 'ASC' } }) }
           >
-            <option value="">Population</option>
-            <option value="">Orbital_Period</option>
-            <option value="">Diameter</option>
-            <option value="">Rotation_Period</option>
-            <option value="">Surface_Water</option>
+            <option value="population">population</option>
+            <option value="orbital_Period">orbital_Period</option>
+            <option value="diameter">diameter</option>
+            <option value="rotation_Period<">rotation_Period</option>
+            <option value="surface_Water">surface_Water</option>
           </select>
 
           <input
@@ -156,7 +148,8 @@ function Table() {
             data-testid="column-sort-input-asc"
             value="ASC"
             id="ASC"
-            onChange={ (e) => setOrder(e.target.value) }
+            // onChange={ ({ target }) => setOrder({
+            //   ...planetName, order: { column: target.value, sort: 'ASC' } }) }
           />
           Ascendente
 
@@ -165,13 +158,14 @@ function Table() {
             data-testid="column-sort-input-desc"
             value="DESC"
             id="DESC"
-            onChange={ (e) => setOrder(e.target.value) }
+            // onChange={ ({ target }) => setOrder({
+            //   ...planetName, order: { column: target.value, sort: 'DESC' } }) }
           />
           Descendente
         </label>
         <button
           data-testid="column-sort-button"
-          // onClick={ collumnSort }
+          // onClick={ columnSort }
         >
           Ordenar
 

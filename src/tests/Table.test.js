@@ -1,5 +1,5 @@
 import App from "../App"
-import { render, screen, waitFor } from '@testing-library/react'
+import { render, screen, waitFor, act } from '@testing-library/react'
 import userEvent from "@testing-library/user-event"
 import mock from "./mock"
 // import getPlanets from "../services/FetchApi"
@@ -78,11 +78,9 @@ test('Planetas da API são renderizados', async () => {
       })
 
       test('Testa a condição igual a',() => {
-        render(
-          <PlanetProvider>
-           <App />
-           </PlanetProvider>
-           )
+        act(() => {
+          render(<PlanetProvider> <App /> </PlanetProvider>)
+        })
         waitFor(() => {
           const planet = screen.getByText('Tatooine')
           expect(planet).toBeInTheDocument();
@@ -99,11 +97,12 @@ test('Planetas da API são renderizados', async () => {
         userEvent.click(btnFilter) 
 
         })
-        test('Testa a condição maior que', () => {
-          render(
-          <PlanetProvider>
-             <App />
-              </PlanetProvider>);
+
+        test
+        ('Testa a condição maior que', async () => {
+          act(() => {
+            render(<PlanetProvider> <App /> </PlanetProvider>)
+          })
           waitFor(() => {
           const planet = screen.getByText('Tatooine')
           expect(planet).toBeInTheDocument();
@@ -116,12 +115,20 @@ test('Planetas da API são renderizados', async () => {
   
           userEvent.selectOptions(columns, 'population')
           userEvent.selectOptions(comparison, 'maior que')
-          userEvent.type(values, '0' )
+          userEvent.type(values, '100000' )
           userEvent.click(btnFilter)
+
+          const table = await screen.findByRole('table')
+          expect(table).toBeInTheDocument();
+          await waitFor(() => {
+            expect(screen.getAllByRole('row')).toHaveLength(8)
+          })
           })
 
           test('Testa a condição menor que', async() => {
-            render(<PlanetProvider> <App /> </PlanetProvider>)
+            act(() => {
+              render(<PlanetProvider> <App /> </PlanetProvider>)
+            })
             await waitFor(() => {
               const planet = screen.getByText('Tatooine')
               expect(planet).toBeInTheDocument();
@@ -136,6 +143,7 @@ test('Planetas da API são renderizados', async () => {
             userEvent.type(values, '200' )
     
             userEvent.click(btnFilter)
+            expect(screen.getByTestId('filter')).toBeInTheDocument();
             
             })
          
@@ -180,4 +188,27 @@ test('Planetas da API são renderizados', async () => {
                  userEvent.click(ascDesc);
                  userEvent.click(orderBtn);
                   }) 
+
+                  test('Testa o botão de excluir filtro individualmente ', () => {
+                    render( <App />)
+
+                    const valueFilter = screen.getByTestId(/value-filter/i)
+                    userEvent.selectOptions( screen.getByTestId(/column-filter/i), "population")
+                 
+                    userEvent.selectOptions( screen.getByTestId(/comparison-filter/i), "maior que")
+                    userEvent.clear(valueFilter)
+                    userEvent.type(valueFilter, '100000')
+                    
+                    const btnFilter = screen.queryByTestId(/button-filter/i)
+                    userEvent.click(btnFilter)
+                    
+                    const allFilters = screen.getByTestId('filter')
+                    expect(allFilters).toBeInTheDocument()
+
+                    const btnX = screen.queryByRole("button", { name: /x/i })
+                    userEvent.click(btnX)
+                    expect(allFilters).not.toBeInTheDocument()
+
+                 
+                    })
 })
